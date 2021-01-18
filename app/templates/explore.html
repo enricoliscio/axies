@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <div class="row">
+      <div class="col">
+        <h1>Welcome to exploration, {{ current_user.username }}!</h1>
+        <br>
+        <div class="list-group">
+          <div class="list-group-item">
+              <h4 class="mb">Motivation (English)</h4>
+              <p class="mb">{{ motivation.motivation_en }}</p>
+          </div>
+          <div class="list-group-item">
+            <h4 class="mb">Motivation (Dutch)</h4>
+            <p class="mb">{{ motivation.motivation_nl }}</p>
+          </div>
+          <div class="list-group-item">
+              <h4 class="mb">Choice</h4>
+              <p class="mb">{{ choice.choice_name_en }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load jQuery for AJAX and custom javascript functions-->
+    <script type=text/javascript src="{{url_for('static', filename='js/jquery.js') }}"></script>
+    <script type=text/javascript src="{{url_for('static', filename='js/main.js') }}"></script>
+    <script type=text/javascript src="{{url_for('static', filename='js/d3.min.js') }}"></script>
+    <!-- Custom CSS -->
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div class='form-group'>
+          <form action="javascript:void(0);" id='value-form' class="form-inline">
+            {{ value_form.hidden_tag() }}
+            {{ value_form.value.label(id="value-form-label") }} {{ value_form.value(size=20, class="form-control") }} {{ value_form.submit(class="btn btn-primary") }}
+          </form>
+        </div>
+      </div>
+      <div class="col-sm-8">
+        <div class="pull-right">
+          <button id="next-motivation" type="button" disabled=true class="btn btn-primary">Next (Farther) Motivation <span class="glyphicon glyphicon-forward"></span></button>
+          <button id="skip-uncomprehensible" type="button" class="btn btn-danger">Not Comprehensible</button>
+          <button id="skip-no-value" type="button" class="btn btn-danger">No value present</button>
+          <button id="skip-already-present" type="button" class="btn btn-danger">Value already annotated</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Will be filled with values -->
+    <div class="row">
+      <div class="col-md-6 value-list-no-padding-left">
+        <ul class="list-group float left" id='value-list'></ul>
+      </div>
+      <div class="col-md-6 thumbnail" id="chartArea">
+      </div>
+    </div>
+
+
+    <!-- Bind functions for async database interaction -->
+    <script type=text/javascript>
+      $(function() {
+        $('ul').on('click', '.add_keyword', function(event){getKeywords(event=event);});
+      });
+      $(function() {
+        $('ul').on('click', '.remove_keyword', removeKeyword);
+      });
+      $(function() {
+        $('ul').on('click', '.remove_value', removeValue);
+      });
+      $('ul').on('click', '.similar-motivations-button', function(event){showSimilarMotivation(event=event);});
+      $(function() {
+        $('#value-form').submit(function() {
+          getValues();
+        });
+      });
+      $(function() {
+        $('document').ready(function() {
+          $('#next-motivation').prop('disabled', true);
+          getValues(reload=true);
+        });
+      });
+      $(function() {
+        $('#next-motivation').on('click', function(event){window.location.reload();});
+      });
+      $(function() {
+        $('#skip-uncomprehensible').on('click', function(event){skipMotivation(1);});
+      });
+      $(function() {
+        $('#skip-no-value').on('click', function(event){skipMotivation(2);});
+      });
+      $(function() {
+        $('#skip-already-present').on('click', function(event){skipMotivation(3);});
+      });
+      $(function() {
+        $(document).on('annotation_update', function(event, params){
+          if (typeof params === 'undefined' || params.prevent_button_update === false) {
+            switchButtons();
+          }
+          drawHistory();
+        });
+      });
+    </script>
+
+    <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+    {% endblock %}

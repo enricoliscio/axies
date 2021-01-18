@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <div class="container">
+        <p>Thank you for joining the Axies experiment, {{ current_user.username }}! You will participate in this
+            experiment in four sessions. Please find below an overview of the steps to follow in each
+            session.</p>
+        <p>If you have any questions, please contact Enrico Liscio (<a href="mailto:e.liscio@tudelft.nl">e.liscio@tudelft.nl</a>)
+        </p>
+
+        <h3>Introduction</h3>
+
+        <dl class="dl-horizontal">
+            <dt>Read</dt>
+            <dd>an <a href="{{ url_for('static', filename='pdf/introduction-intro.pdf') }}" target="_blank">
+                introductory explanation</a> on the experiment.
+            </dd>
+
+            <dt>Answer</dt>
+            <dd>a <a href="https://forms.gle/RnpzzZTsBaUpTHAR8" target="_blank">
+                survey</a> on your background in values.
+            </dd>
+
+            <dt>Read</dt>
+            <dd>about <a href="{{ url_for('static', filename='pdf/introduction-values.pdf') }}" target="_blank">personal
+                and context-specific values</a>.
+            </dd>
+
+            <dt>Read</dt>
+            <dd>about <a href="{{ url_for('static', filename='pdf/introduction-pve.pdf') }}" target="_blank">Participatory
+                Value Evaluation (PVE)</a>.
+            </dd>
+        </dl>
+
+        <h3>Session 1: Initial Exploration</h3>
+
+        <dl class="dl-horizontal">
+            <dt>Read</dt>
+            <dd>the <a href="{{ url_for('static', filename='pdf/axies-exploration-methodology.pdf') }}" target="_blank">Exploration
+                methodology</a>.
+            </dd>
+
+            <dt>Select</dt>
+            <dd>a context from the navigation bar on the top-right, as indicated in the invitation email.</dd>
+
+            <dt>Perform</dt>
+            <dd>exploration in this web application, by clicking the Explore button on top.</dd>
+
+            <dt>Answer</dt>
+            <dd>a <a href="https://forms.gle/7Fw1fthpmFNcUdA99" target="_blank">
+                survey</a> on your Exploration experience.
+            </dd>
+        </dl>
+
+        <h3>Session 2: Initial Consolidation</h3>
+
+        <dl class="dl-horizontal">
+            <dt>Read</dt>
+            <dd>the <a href="{{ url_for('static', filename='pdf/axies-consolidation-methodology.pdf') }}" target="_blank">Consolidation
+                methodology</a>.
+            </dd>
+
+            <dt>Select</dt>
+            <dd>a context from the navigation bar on the top-right, as indicated in the invitation email.</dd>
+
+            <dt>Perform</dt>
+            <dd>consolidation in this web application together with the other members of your group,
+                by clicking the Consolidation button on top.</dd>
+
+            <dt>Warning</dt>
+            <dd>Once one of you starts the Consolidation phase, all actions you perform in the Exploration
+                will no longer be transfered over to the Consolidation phase.</dd>
+
+            <dt>Answer</dt>
+            <dd>a <a href="https://forms.gle/kTG1WKxE5UNvVqeh6" target="_blank">
+                survey</a> on your Consolidation experience.
+            </dd>
+        </dl>
+
+        <h3>Session 3: Second Consolidation</h3>
+
+        <dl class="dl-horizontal">
+            <dt>Stay tuned</dt>
+            <dd>for the instructions.</dd>
+        </dl>
+    </div>
+{% endblock %}

@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <!-- Announcement row -->
+    <div class="row">
+        <div class="col">
+            <h1>Welcome to consolidation, {{ current_user.username }}!</h1>
+            <br/>
+        </div>
+    </div>
+
+    <!-- Value merge row -->
+    <div class="row">
+        {% if value_pair[0] is not none and value_pair[1] is not none %}
+        <div class="col-sm-3">
+            <div class="value_container list-group-item" id="left">
+                <div class="pull-right">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#triggerSentencesLeft">
+                        Show <span class="glyphicon glyphicon-th-list"></span>
+                    </button>
+                </div>
+                <h3 style='display:inline-block' class="left-value" id="{{ value_pair[0].id }}">{{ value_pair[0].name }}</h3>
+                <p id="value-original-author">Added {{ value_pair[0].original_author }}</p>
+                <ul class="list-inline list-group-horizontal-sm" id='merge-keyword-list{{value_pair[0].id}}'></ul>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="value_container list-group-item" id="right">
+                <div class="pull-right">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#triggerSentencesRight">
+                        Show <span class="glyphicon glyphicon-th-list"></span>
+                    </button>
+                </div>
+                <h3 style='display:inline-block' class="right-value" id="{{ value_pair[1].id }}">{{ value_pair[1].name }}</h3>
+                <p id="value-original-author">Added {{ value_pair[1].original_author }}</p>
+                <ul class="list-inline list-group-horizontal-sm" id='merge-keyword-list{{value_pair[1].id}}'></ul>
+            </div>
+        </div>
+        <div class="col-sm-3 text-center">
+            <h3 style='display:inline-block'><span class="glyphicon glyphicon-chevron-right"></span></h3> <br/>
+            {{ value_form.submit(class="btn btn-success", form="merge-value-form", value="Merge") }}
+        </div>
+        <div class="col-sm-3">
+            <div class="value_container list-group-item">
+                <div class='form-group'>
+                    <form action="javascript:void(0);" id='merge-value-form' class="form-inline">
+                        {{ value_form.hidden_tag() }}
+                        {{ value_form.value(class="form-control", style='display:inline-block', id="merge-value-name-field") }}
+                    </form>
+                    <ul class="list-inline list-group-horizontal-sm"></ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Modal for showing trigger sentences -->
+    <div class="modal fade" id="triggerSentencesLeft" tabindex="-1" role="dialog" aria-labelledby="triggerSentencesLeftTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title" id="triggerSentencesLeftTitle">Trigger sentences</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                {% for motivation in triggers[0] %}
+                    <li class="list-group-item">{{ motivation.motivation_en }}</li>
+                {%endfor%}
+                </ul>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Modal for showing trigger sentences of right element in couple -->
+    <div class="modal fade" id="triggerSentencesRight" tabindex="-1" role="dialog" aria-labelledby="triggerSentencesRightTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title" id="triggerSentencesRightTitle">Trigger sentences</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                {% for motivation in triggers[1] %}
+                    <li class="list-group-item">{{ motivation.motivation_en }}</li>
+                {%endfor%}
+                </ul>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Modal for adding defining goal -->
+    <div class="modal fade" id="addDefiningGoalPopup" tabindex="-1" role="dialog" aria-labelledby="addDefiningGoalPopupTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header" id="addDefiningGoalPopupHeader">
+                <h3 class="modal-title" id="addDefiningGoalPopupTitle">Add Defining Goal</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                <div class="col-sm-12 form-group">
+                <form class="form-horizontal" id="add-defining-goal-form" action="javascript:void(0);">
+                    <textarea class="form-control" rows=3 id="defining-goal-textarea"></textarea>
+                    <br/>
+                    <input type="button" class="btn btn-primary pull-right defining-goal-submit" value="Save"/>
+                </form>
+                </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+        </div>`
+
+    <!-- Vertical spacer -->
+    <div class="row">
+        <div class="col" style="height:34px;"></div>
+    </div>
+
+    <!-- Button row -->
+    <div class="row">
+        <div class="col-sm-4">
+            <div class='form-group'>
+              <form action="javascript:void(0);" id='value-form' class="form-inline">
+                {{ value_form.hidden_tag() }}
+                {{ value_form.value.label(id="value-form-label") }} {{ value_form.value(size=20, class="form-control", id="add-value-input") }} {{ value_form.submit(class="btn btn-primary") }}
+              </form>
+            </div>
+          </div>
+        {% if value_pair[0] is not none and value_pair[1] is not none %}
+        <div class="col-sm-8">
+            <div class="pull-right">
+                <button id="no-merge" type="button" class="btn btn-danger">Do not merge <span class="glyphicon glyphicon-remove"></span></button>
+                <button id="next-pair" type="button" class="btn btn-primary" disabled=true>Next pair <span class="glyphicon glyphicon-forward"></span></button>
+                <button id="pick-pair" type="button" class="btn btn-info" disabled=true data-toggle="modal" data-target="#pickNextPair">Pick next pair <span class="glyphicon glyphicon-step-forward"></span></button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Modal for picking next pair -->
+    <div class="modal fade" id="pickNextPair" tabindex="-1" role="dialog" aria-labelledby="pickNextPairTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header" id="pickNextPairModalHeader">
+                <h3 class="modal-title" id="pickNextPairTitle">Pick the next pair to be shown
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-5" id="value-selector-container">
+                        <button type="button" class="btn btn-default dropdown-toggle value-selection-btn-left" data-toggle="dropdown">
+                            Select left value <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" id="value-picker-left"></ul>
+                    </div>
+                    <div class="col-sm-2">
+                    </div>
+                    <div class="col-sm-5" id="value-selector-container">
+                        <button type="button" class="btn btn-default dropdown-toggle value-selection-btn-right" data-toggle="dropdown">
+                            Select right value <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" id="value-picker-right"></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id='show-next-pair'>Show pair</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+    <!-- Vertical spacer -->
+    <div class="row">
+        <div class="col" style="height:34px;"></div>
+    </div>
+
+    <!-- Load jQuery for AJAX and custom javascript functions-->
+    <script type=text/javascript src="{{url_for('static', filename='js/jquery.js') }}"></script>
+    <script type=text/javascript src="{{url_for('static', filename='js/main.js') }}"></script>
+    <script type=text/javascript src="{{url_for('static', filename='js/d3.min.js') }}"></script>
+    <script type=text/javascript src="{{url_for('static', filename='js/consolidate.js') }}"></script>
+
+    <!-- Will be filled with values -->
+    <div class="row">
+        <div class="col-md-6 value-list-no-padding-left">
+          <ul class="list-group float left" id='value-list'></ul>
+        </div>
+        <div class="col-md-6 thumbnail" id="chartArea">
+        </div>
+    </div>
+
+    <!-- Bind functions for async database interaction -->
+    <script type=text/javascript>
+        // Consolidation specific
+        $(function() {
+            $('#merge-value-form').submit(mergeValuesCSD);
+        });
+        $(function() {
+            $('#no-merge').on('click', skipPairCSD);
+        });
+        $(function() {
+            $('#next-pair').on('click', function() {window.location.reload();});
+        });
+
+        // Value functions
+        $(function() {
+            $('#value-form').submit(addValueCSD);
+        });
+        $(function() {
+            $('ul').on('click', '.remove_value', removeValueCSD);
+        });
+
+        // Keyword functions
+        $(function() {
+            $('ul').on('click', '.add_keyword', addKeywordCSD);
+        });
+        $(function() {
+            $('ul').on('click', '.remove_keyword', removeKeywordCSD);
+        });
+
+        $(function() {
+            $('#pick-pair').on('click', updateValuePicker);
+        });
+        $(function() {
+            $('ul').on('click', '.open-dg-popup-button', function (e) {getDefiningGoal(e);})
+            $('.defining-goal-submit').on('click', function(e) {addDefiningGoal(e);});
+        });
+
+
+        // User performs action
+        $(function() {
+            $(document).on('consolidation_action', function(event, params){
+                if (typeof params === 'undefined' || params.prevent_button_update === false) {
+                    switchButtons();
+                }
+                drawHistoryCSD();
+            });
+        });
+        $(function() {
+            $('#show-next-pair').on('click', function () {
+                preloadNextPair();
+            });
+        });
+        $(function(){
+            $(".dropdown-menu").on('click', 'li a', function() {
+                var button = $(this).closest('#value-selector-container').find('.btn');
+                button.text($(this).text());
+                button.val($(this).text());
+                button.prop('id', $(this).prop('id'))
+            });
+        });
+
+        // Document load
+        $(function() {
+            $('document').ready(function() {
+                {% if value_pair[0] is not none and value_pair[1] is not none %}
+                getKeywordsCSD({{ value_pair[0].id }}).then(function (data) {showKeywords({{ value_pair[0].id }}, data.keywords, prefix="merge-");});
+                getKeywordsCSD({{ value_pair[1].id }}).then(function (data) {showKeywords({{ value_pair[1].id }}, data.keywords, prefix="merge-");});
+                {% endif %}
+                getValuesCSD();
+                drawHistoryCSD();
+            });
+        });
+    </script>
+
+    <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+    {% endblock %}

@@ -1,0 +1,23 @@
+#value-form-label {
+    font-size: 1.6rem;
+    margin-right: 0.5rem;
+}
+
+.value-list-no-padding-left {
+    padding-left: 0px;
+}
+
+.remove-entry-icon {
+    color:inherit;
+    cursor:pointer;
+    vertical-align: bottom;
+    top:50%;
+    line-height: inherit;
+}
+
+*[id^='keyword-suggestion'] {
+    color:#707070;
+    font-style: italic;
+    font-size: 1.2rem;
+    word-break: break-all;
+}

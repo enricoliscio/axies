@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <div class="container">
+        <div class="row">
+            <p>Thanks for your interest in Axies.If you wish to participate in the Axies user study, please read the
+                informed consent form below, carefully.
+            </p>
+        </div>
+
+        <div class="row">
+            <h3>Informed Consent Form</h3>
+
+            <p><b>Purpose of this research study</b>: In this study, we aim at creating a list of context-related
+                personal
+                values, based on input provided by participants to a survey.</p>
+
+            <p><b>What you will do in the study</b>: You will annotate personal values based on written input provided
+                by
+                participants to a survey. Additional details will follow.</p>
+
+            <p><b>Time required</b>: It is dependent on you, as it will be explained in the following instructions.
+                Estimated
+                time is 4 hours, divided in four 1 hour slots.</p>
+
+            <p><b>Risks</b>: There are no risks anticipated in this study. However, in case of doubts or concerns, do
+                not
+                hesitate to contact the researchers. </p>
+
+            <p><b>Benefits</b>: You will not directly benefit from participating in this study.</p>
+
+            <p><b>Privacy and confidentiality</b>: Should you agree to take part, your participation will be completely
+                confidential. All information gathered in the survey will be stored securely in compliance with the
+                standards
+                set by the European Union General Data Protection Regulation (GDPR). No one outside the research group
+                will
+                have
+                access to the data during the research period. Background data will be kept by the research group until
+                the
+                analyses are finalized, at the latest in September 2021. By this date, background data will be
+                pseudonymized.
+                Upon analysis and publication, the pseudonymized information will be made available on open access for
+                other
+                researchers to analyse. This study is approved by the Human Research Ethics Committee of the Delft
+                University of
+                Technology (date 07/08/2020).</p>
+
+            <p><b>Right to withdraw from the study</b>: Participation in the study is completely voluntary. If at any
+                time
+                you
+                do not wish to continue your participation, you are welcome to withdraw from the survey without penalty.
+            </p>
+
+            <p><b>How to withdraw from the study</b>: You can end your participation by closing the browser window. If
+                you
+                want
+                to withdraw your participation after completing a session, please contact Enrico Liscio (see email
+                information
+                above). It is only possible to withdraw up to 2 months after the end of participation. it is not
+                possible to
+                withdraw after the publication of the data.</p>
+
+            <p><b>Questions?</b> For questions, concerns, or complaints, please contact Enrico Liscio
+                (<a href="mailto:e.liscio@tudelft.nl">e.liscio@tudelft.nl</a>).
+            </p>
+        </div>
+        <div class="row">
+            <h3>Consent and Register</h3>
+            <p><b>If you wish to participate</b> in this study, please select the
+                <mark>I agree to participate</mark>
+                checkbox, and register an account.
+            <div style="border: 2px solid lightgray; border-radius: 15px" class="form-group col-md-6">
+                {{ wtf.quick_form(form, button_map={'submit':'primary'}) }}
+                <br>
+            </div>
+        </div>
+    </div>
+{% endblock %}

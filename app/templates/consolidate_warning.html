@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+    <!-- Announcement row -->
+    <div class="row pagination-centered">
+        <div class="col-md-2 "></div>
+        <div class="col-md-8 ">
+            <h1>You are about to start Consolidation, {{ current_user.username }}!</h1>
+            <p>Please take note that you should start this together with your other group members. Once one of you starts the Consolidation phase, all actions you perform in the Exploration will no longer be transfered over to the Consolidation phase.</p>
+            <hr>
+            <h4>Other members in your group:</h4>
+            <ul class="list-group">
+                {% for member in group_members %}
+                <li class="list-group-item">{{ member }}</li>
+                {%endfor%}
+            </ul>
+            <div class="col" style="height:34px;"></div>
+            <div class="pull-right">
+                <button type="button" class="btn btn-primary" id="start-consolidate">I understand, continue</button>
+            </div>
+        </div>
+        <div class="col-md-2 "></div>
+    </div>
+
+    <!-- Load jQuery for AJAX and custom javascript functions-->
+    <script type=text/javascript src="{{url_for('static', filename='js/jquery.js') }}"></script>
+
+    <!-- Bind functions for async database interaction -->
+    <script type=text/javascript>
+        $(function() {
+            $('#start-consolidate').on('click', function () {
+                $.getJSON($SCRIPT_ROOT + '/start_consolidation', {}, function(data) {
+                    if (data.success) {
+                        window.location.reload();
+                    }
+                });
+            });
+        });
+
+    </script>
+
+    <script type=text/javascript>
+        $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    </script>
+    {% endblock %}

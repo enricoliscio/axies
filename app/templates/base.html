@@ -1,0 +1,94 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    {% if title %}{{ title }} - Axies{% else %}Welcome to Axies{% endif %}
+{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/plotting.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/explore.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/consolidation.css') }}">
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script type=text/javascript src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script type=text/javascript src="{{ url_for('static', filename='js/navbar.js') }}"></script>
+    <script>
+        $('input,textarea').attr('autocomplete', 'off');
+
+        $(function() {
+            $('.select-context').on('click', function(event){
+                window.location.reload();
+            });
+        });
+    </script>
+{% endblock %}
+
+
+{% block navbar %}
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url_for('main.index') }}">Axies</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                    <li><a href="{{ url_for('main.explore') }}">Explore</a></li>
+                    <li><a href="{{ url_for('main.consolidate') }}">Consolidate</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.is_anonymous %}
+                        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+                    {% else %}
+                        <li class="dropdown">
+                            {% set working_context = current_user.get_working_context() %}
+                            {% if working_context == None %}
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false" id="context-dropdown">Select Context <span
+                                        class="caret"></span></a>
+                            {% else %}
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                   aria-haspopup="true" aria-expanded="false"
+                                   id="context-dropdown">{{ working_context.context_name_en }} <span
+                                        class="caret"></span></a>
+                            {% endif %}
+                            <ul class="dropdown-menu" id="context-menu" aria-labelledby="context-dropdown">
+                                {% for context in current_user.contexts_assigned() %}
+                                    <li id="{{ context.id }}"><a class="select-context" href="#">{{ context.context_name_en }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-info" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {# application content needs to be provided in the app_content block #}
+        {% block app_content %}{% endblock %}
+    </div>
+{% endblock %}
